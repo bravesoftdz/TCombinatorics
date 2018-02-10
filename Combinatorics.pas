@@ -1,4 +1,4 @@
-unit Unit2;
+unit Combinatorics;
 
 interface
 
@@ -84,7 +84,7 @@ begin
 
 end;
 
-function TCombinations.getFormula: string;
+function TCombinations.GetFormula: string;
 begin
 
  if (repetition) then
@@ -146,7 +146,7 @@ begin
 
 end;
 
-function TDispositions.getFormula: string;
+function TDispositions.GetFormula: string;
 begin
 
  if (repetition) then
@@ -211,7 +211,7 @@ begin
 
 end;
 
-function TPermutations.getFormula: string;
+function TPermutations.GetFormula: string;
 begin
 
  if (repetition) then
