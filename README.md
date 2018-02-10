@@ -17,3 +17,5 @@ Everything is reference counted because we're creating an object with an interfa
  1. <b>n</b>: The number of items that you have
  2. <b>k</b>: The number of groups in which you can arrange the n items
  3. <b>repetition</b>: True if there can be repetitions (duplicates) in the n items that you have. False if the aren't duplicates.
+
+The class `TPermutations` is a bit different because the parameter `k` is not an integer but it's an (open) array of integers. That's because you have to put the number of repeated items and so the constructor will look like this:
