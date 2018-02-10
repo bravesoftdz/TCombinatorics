@@ -1,4 +1,4 @@
-unit Unit3;
+unit Combinatorics;
 
 interface
 
@@ -7,50 +7,50 @@ uses
 
 type
 
- ICombinatorio = interface
-  function getSoluzioni(): UInt64;
-  function getFormula(): string;
+ ICombinatorics = interface
+  function GetSolution(): UInt64;
+  function GetFormula(): string;
  end;
 
- TCombinazioni = class(TInterfacedObject, ICombinatorio)
+ TCombinations = class(TInterfacedObject, ICombinatorics)
   private
    n, k: integer;
-   ripetizione: boolean;
-   function fattoriale(const x: integer): UInt64;
+   repetition: boolean;
+   function Factorial(const x: integer): UInt64;
   public
-   constructor Create(const n, k: integer; const ripetizione: boolean);
-   function getSoluzioni(): UInt64;
-   function getFormula(): string;
+   constructor Create(const n, k: integer; const repetition: boolean);
+   function GetSolution(): UInt64;
+   function GetFormula(): string;
  end;
 
- TDisposizioni = class(TInterfacedObject, ICombinatorio)
+ TDispositions = class(TInterfacedObject, ICombinatorics)
   private
    n, k: integer;
-   ripetizione: boolean;
-   function fattoriale(const x: integer): UInt64;
+   repetition: boolean;
+   function Factorial(const x: integer): UInt64;
   public
-   constructor Create(const n, k: integer; const ripetizione: boolean);
-   function getSoluzioni(): UInt64;
-   function getFormula(): string;
+   constructor Create(const n, k: integer; const repetition: boolean);
+   function GetSolution(): UInt64;
+   function GetFormula(): string;
  end;
 
- TPermutazioni = class(TInterfacedObject, ICombinatorio)
+ TPermutations = class(TInterfacedObject, ICombinatorics)
   private
    n: integer;
    k: string;
-   ripetizione: boolean;
-   function fattoriale(const x: integer): UInt64;
+   repetition: boolean;
+   function Factorial(const x: integer): UInt64;
   public
-   constructor Create(const n: integer; const k: string; ripetizione: boolean);
-   function getSoluzioni(): UInt64;
-   function getFormula(): string;
+   constructor Create(const n: integer; const k: string; repetition: boolean);
+   function GetSolution(): UInt64;
+   function GetFormula(): string;
  end;
 
 implementation
 
 { TCombinazioni }
 
-constructor TCombinazioni.Create(const n, k: integer; const ripetizione: boolean);
+constructor TCombinations.Create(const n, k: integer; const repetition: boolean);
 begin
 
  inherited Create;
@@ -61,7 +61,7 @@ begin
    raise Exception.Create('"n" e "k" devono essere > 0');
   end;
 
- if ( (n < k) and (ripetizione = false) ) then
+ if ( (n < k) and (repetition = false) ) then
   begin
    raise Exception.Create('n deve essere maggiore di k');
   end;
@@ -69,50 +69,50 @@ begin
  //imposto le condizioni del costruttore
  Self.n := n;
  Self.k := k;
- Self.ripetizione := ripetizione;
+ Self.repetition := repetition;
 
 end;
 
-function TCombinazioni.fattoriale(const x: integer): UInt64;
+function TCombinations.Factorial(const x: integer): UInt64;
 begin
 
  Result:= 1;
  if x > 0 then
   begin
-   Result:= fattoriale(x-1)*x;
+   Result:= Factorial(x-1)*x;
   end;
 
 end;
 
-function TCombinazioni.getFormula: string;
+function TCombinations.getFormula: string;
 begin
 
- if (ripetizione) then
+ if (repetition) then
   Result := '(n+k-1)! / (k! * (n-1)!)'
  else
   Result := 'n! / (k! * (n-k)!)';
 
 end;
 
-function TCombinazioni.getSoluzioni: UInt64;
+function TCombinations.GetSolution: UInt64;
 begin
 
- if ((n >= 31) and not(ripetizione)) or (((n >= 21) or (k >= 21)) and ripetizione) then
+ if ((n >= 31) and not(repetition)) or (((n >= 21) or (k >= 21)) and repetition) then
  begin
   raise Exception.Create('Valori troppo grandi!');
  end;
 
- if (ripetizione) then
-  Result := fattoriale(n+k-1) div (fattoriale(k) * fattoriale(n-1))
+ if (repetition) then
+  Result := Factorial(n+k-1) div (Factorial(k) * Factorial(n-1))
  else
-  Result := fattoriale(n) div (fattoriale(k) * fattoriale(n-k));
+  Result := Factorial(n) div (Factorial(k) * Factorial(n-k));
 
 end;
 
 { TDisposizioni }
 
-constructor TDisposizioni.Create(const n, k: integer;
-  const ripetizione: boolean);
+constructor TDispositions.Create(const n, k: integer;
+  const repetition: boolean);
 begin
 
  inherited Create;
@@ -123,7 +123,7 @@ begin
    raise Exception.Create('"n" e "k" devono essere > 0');
   end;
 
- if ( (n < k) and (ripetizione = false) ) then
+ if ( (n < k) and (repetition = false) ) then
   begin
    raise Exception.Create('n deve essere maggiore di k');
   end;
@@ -131,32 +131,32 @@ begin
  //imposto le condizioni del costruttore
  Self.n := n;
  Self.k := k;
- Self.ripetizione := ripetizione;
+ Self.repetition := repetition;
 
 end;
 
-function TDisposizioni.fattoriale(const x: integer): UInt64;
+function TDispositions.Factorial(const x: integer): UInt64;
 begin
 
  Result:= 1;
  if x > 0 then
   begin
-   Result:= fattoriale(x-1)*x;
+   Result:= Factorial(x-1)*x;
   end;
 
 end;
 
-function TDisposizioni.getFormula: string;
+function TDispositions.getFormula: string;
 begin
 
- if (ripetizione) then
+ if (repetition) then
   Result := 'n^k'
  else
   Result := 'n! / (n-k)!';
 
 end;
 
-function TDisposizioni.getSoluzioni: UInt64;
+function TDispositions.GetSolution: UInt64;
 begin
 
  //risultati troppo grandi che non vanno bene
@@ -165,16 +165,16 @@ begin
    raise Exception.Create('Valori troppo grandi!');
   end;
 
- if (ripetizione) then
+ if (repetition) then
   Result := round(power(n,k))
  else
-  Result := fattoriale(n) div fattoriale(n-k);
+  Result := Factorial(n) div Factorial(n-k);
 
 end;
 
 { TPermutazioni }
 
-constructor TPermutazioni.Create(const n: integer; const k: string; ripetizione: boolean);
+constructor TPermutations.Create(const n: integer; const k: string; repetition: boolean);
 var a: integer;
 begin
 
@@ -189,25 +189,25 @@ begin
  //imposto le condizioni del costruttore
  Self.n := n;
  Self.k := k;
- Self.ripetizione := ripetizione;
+ Self.repetition := repetition;
 
 end;
 
-function TPermutazioni.fattoriale(const x: integer): UInt64;
+function TPermutations.Factorial(const x: integer): UInt64;
 begin
 
  Result:= 1;
  if x > 0 then
   begin
-   Result:= fattoriale(x-1)*x;
+   Result:= Factorial(x-1)*x;
   end;
 
 end;
 
-function TPermutazioni.getFormula: string;
+function TPermutations.getFormula: string;
 begin
 
- if (ripetizione) then
+ if (repetition) then
   begin
    Result := 'n! / (x1!*x2!*x3!...*xk!)';
   end
@@ -218,13 +218,13 @@ begin
 
 end;
 
-function TPermutazioni.getSoluzioni: UInt64;
+function TPermutations.GetSolution: UInt64;
 var diviso: UInt64;
     nums: TStrings;
     i: integer;
 begin
 
- if (ripetizione) then
+ if (repetition) then
   begin
 
    nums := TStringList.Create;
@@ -233,14 +233,14 @@ begin
 
    for i := 0 to (nums.Count-1) do
     begin
-     diviso := diviso * fattoriale(StrToInt(nums[i]));
+     diviso := diviso * Factorial(StrToInt(nums[i]));
     end;
 
-   Result := fattoriale(n) div diviso;
+   Result := Factorial(n) div diviso;
   end
  else
   begin
-   Result := fattoriale(n);
+   Result := Factorial(n);
   end;
 
 end;
