@@ -1,4 +1,4 @@
-unit Combinatorics;
+unit Unit2;
 
 interface
 
@@ -37,11 +37,11 @@ type
  TPermutations = class(TInterfacedObject, ICombinatorics)
   private
    n: integer;
-   k: string;
+   k: array of integer;
    repetition: boolean;
    function Factorial(const x: integer): UInt64;
   public
-   constructor Create(const n: integer; const k: string; repetition: boolean);
+   constructor Create(const n: integer; const k: array of integer; repetition: boolean);
    function GetSolution(): UInt64;
    function GetFormula(): string;
  end;
@@ -174,21 +174,28 @@ end;
 
 { TPermutazioni }
 
-constructor TPermutations.Create(const n: integer; const k: string; repetition: boolean);
+constructor TPermutations.Create(const n: integer; const k: array of integer; repetition: boolean);
 var a: integer;
 begin
 
  inherited Create;
 
  //controllo di avere un buon input
- if ( (n > 15) or (k.Length > 10) ) then
+ if ( (n > 15) or (Length(k) > 10) ) then
   begin
    raise Exception.Create('Valori troppo grandi!');
   end;
 
+ if Length(k) = 0 then
+   raise Exception.Create('The array k must have at least one value!');
+
  //imposto le condizioni del costruttore
  Self.n := n;
- Self.k := k;
+
+ SetLength(Self.k, Length(k));
+ for a := Low(k) to High(k) do
+   Self.k[a] := k[a];
+
  Self.repetition := repetition;
 
 end;
@@ -220,20 +227,16 @@ end;
 
 function TPermutations.GetSolution: UInt64;
 var diviso: UInt64;
-    nums: TStrings;
     i: integer;
 begin
 
  if (repetition) then
   begin
-
-   nums := TStringList.Create;
-   nums.CommaText := k;
    diviso := 1;
 
-   for i := 0 to (nums.Count-1) do
+   for i := Low(k) to High(k) do
     begin
-     diviso := diviso * Factorial(StrToInt(nums[i]));
+     diviso := diviso * Factorial(k[i]);
     end;
 
    Result := Factorial(n) div diviso;
