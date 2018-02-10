@@ -19,3 +19,7 @@ Everything is reference counted because we're creating an object with an interfa
  3. <b>repetition</b>: True if there can be repetitions (duplicates) in the n items that you have. False if the aren't duplicates.
 
 The class `TPermutations` is a bit different because the parameter `k` is not an integer but it's an (open) array of integers. That's because you have to put the number of repeated items and so the constructor will look like this:
+
+``` delphi
+ TestComb := TPermutations.Create(8, [1,2], true);
+```
